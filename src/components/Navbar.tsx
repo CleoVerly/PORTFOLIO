@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, useAnimationFrame } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 const navLinks = [
   { label: "Home", href: "#hero" },
@@ -59,10 +60,15 @@ export default function Navbar() {
       <nav className="fixed top-0 left-0 right-0 z-50 glass py-4 md:hidden">
         <div className="px-6 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="relative group">
-            <span className="text-lg font-bold tracking-tight text-text-primary">
-              CLEO<span className="gradient-text">VERLY</span>
-            </span>
+          <Link href="/" className="relative group flex items-center">
+            <Image 
+              src="/CLEOVERLY.svg" 
+              alt="CLEOVERLY" 
+              width={140} 
+              height={32} 
+              className="w-auto h-6 object-contain"
+              priority
+            />
           </Link>
 
           {/* Mobile Toggle */}
