@@ -58,12 +58,32 @@ import GlobalEffects from "@/components/layout/GlobalEffects";
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Cleo Verly",
+    "alternateName": "cleoverly",
+    "url": "https://cleoverly.dev",
+    "jobTitle": "Software Engineer & Full-Stack Developer",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Independent"
+    },
+    "sameAs": [
+      "https://github.com/cleoverly"
+    ]
+  };
+
   return (
     <html
       lang="en"
       className={`${inter.variable} ${jost.variable} ${jetbrainsMono.variable}`}
     >
       <body className="min-h-screen flex flex-col antialiased relative">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <GlobalEffects />
         {children}
       </body>
