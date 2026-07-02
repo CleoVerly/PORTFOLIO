@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import ScrollReveal, { ScrollRevealItem } from "./ScrollReveal";
-import ProjectCard from "./ProjectCard";
-import LinkConfirmModal from "./LinkConfirmModal";
+import ScrollReveal, { ScrollRevealItem } from "../ui/ScrollReveal";
+import ProjectCard from "../ui/ProjectCard";
+import LinkConfirmModal from "../modals/LinkConfirmModal";
 import { projects, type Project } from "@/data/projects";
 import Link from "next/link";
 
@@ -28,13 +28,13 @@ export default function FeaturedProjects() {
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12">
             <div>
               <p className="eyebrow mb-5">Selected work</p>
-              <h2 className="display text-3xl sm:text-4xl md:text-5xl font-semibold text-text-primary max-w-xl">
+              <h2 className="display text-3xl sm:text-4xl md:text-5xl font-light text-text-primary max-w-xl">
                 Take a closer look at some of my work.
               </h2>
             </div>
             <Link
               href="/projects"
-              className="text-sm text-text-secondary hover:text-text-primary transition-colors inline-flex items-center gap-1.5 shrink-0"
+              className="text-sm text-text-secondary hover:text-accent transition-colors inline-flex items-center gap-1.5 shrink-0"
             >
               View all
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

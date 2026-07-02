@@ -1,6 +1,6 @@
 "use client";
 
-import ScrollReveal from "./ScrollReveal";
+import ScrollReveal from "../ui/ScrollReveal";
 import { skillCategories } from "@/data/skills";
 
 const allSkills = skillCategories.flatMap((cat) => cat.skills);

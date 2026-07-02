@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { FiLayout, FiServer, FiCpu, FiBarChart2 } from "react-icons/fi";
-import ScrollReveal from "./ScrollReveal";
+import ScrollReveal from "../ui/ScrollReveal";
 
 const services = [
   {
@@ -35,7 +35,7 @@ export default function ServicesSection() {
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         <ScrollReveal>
           <p className="eyebrow mb-6">What I do</p>
-          <h2 className="display text-3xl sm:text-4xl md:text-5xl font-semibold text-text-primary max-w-2xl">
+          <h2 className="display text-3xl sm:text-4xl md:text-5xl font-light text-text-primary max-w-2xl">
             Covering everything from early ideas to polished, shipped results.
           </h2>
         </ScrollReveal>
@@ -49,9 +49,9 @@ export default function ServicesSection() {
               viewport={{ once: true, margin: "-60px" }}
               transition={{ duration: 0.6, delay: i * 0.08, ease }}
               whileHover={{ y: -4 }}
-              className="card p-6 flex flex-col"
+              className="card p-6 flex flex-col group"
             >
-              <div className="w-11 h-11 rounded-xl bg-bg-secondary border border-border flex items-center justify-center text-xl text-accent mb-5">
+              <div className="w-11 h-11 rounded-xl bg-bg-tertiary border border-[rgba(201,169,110,0.15)] flex items-center justify-center text-xl text-accent mb-5 group-hover:border-[rgba(201,169,110,0.35)] group-hover:bg-[rgba(201,169,110,0.08)] transition-all duration-300">
                 {s.icon}
               </div>
               <h3 className="text-base font-semibold text-text-primary">

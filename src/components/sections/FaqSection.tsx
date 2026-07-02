@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import ScrollReveal from "./ScrollReveal";
+import ScrollReveal from "../ui/ScrollReveal";
 
 const faqs = [
   {
@@ -37,7 +37,7 @@ function FaqItem({
   onToggle: () => void;
 }) {
   return (
-    <div className="border-b border-border">
+    <div className="border-b border-[rgba(255,255,255,0.07)]">
       <button
         onClick={onToggle}
         className="w-full flex items-center justify-between gap-4 py-5 text-left group"
@@ -53,7 +53,11 @@ function FaqItem({
         <motion.span
           animate={{ rotate: isOpen ? 45 : 0 }}
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="shrink-0 w-7 h-7 rounded-full border border-border flex items-center justify-center text-text-primary"
+          className={`shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300 ${
+            isOpen
+              ? "border-accent text-accent bg-[rgba(201,169,110,0.1)]"
+              : "border-[rgba(255,255,255,0.1)] text-text-muted"
+          }`}
         >
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
             <path d="M12 5v14M5 12h14" />
@@ -87,7 +91,7 @@ export default function FaqSection() {
       <div className="max-w-3xl mx-auto px-6 sm:px-8">
         <ScrollReveal>
           <p className="eyebrow mb-6">FAQ</p>
-          <h2 className="display text-3xl sm:text-4xl md:text-5xl font-semibold text-text-primary mb-12">
+          <h2 className="display text-3xl sm:text-4xl md:text-5xl font-light text-text-primary mb-12">
             Some things you might be wondering.
           </h2>
         </ScrollReveal>

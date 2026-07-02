@@ -32,7 +32,7 @@ export default function LinkConfirmModal({
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           className="card max-w-md w-full mx-4 p-8 relative"
-          style={{ background: "var(--bg-secondary)" }}
+          style={{ background: "var(--bg-elevated)" }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Close button */}
@@ -48,8 +48,8 @@ export default function LinkConfirmModal({
           </button>
 
           {/* Icon */}
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 border border-border">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-text-primary">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-5 border border-[rgba(201,169,110,0.2)] bg-[rgba(201,169,110,0.07)]">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
               <polyline points="15 3 21 3 21 9" />
               <line x1="10" y1="14" x2="21" y2="3" />

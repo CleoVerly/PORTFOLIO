@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import ScrollReveal from "./ScrollReveal";
+import ScrollReveal from "../ui/ScrollReveal";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -39,7 +39,7 @@ export default function BentoSection() {
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         <ScrollReveal>
           <p className="eyebrow mb-6">Why work with me</p>
-          <h2 className="display text-3xl sm:text-4xl md:text-5xl font-semibold text-text-primary max-w-2xl">
+          <h2 className="display text-3xl sm:text-4xl md:text-5xl font-light text-text-primary max-w-2xl">
             A smooth, reliable build — start to finish.
           </h2>
         </ScrollReveal>
@@ -49,14 +49,15 @@ export default function BentoSection() {
           <Card delay={0}>
             <div className="flex-1 flex items-center justify-center py-6">
               <div className="relative">
-                <div className="w-24 h-24 rounded-full border-4 border-accent/20 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-accent flex items-center justify-center text-white">
+                <div className="w-24 h-24 rounded-full border border-[rgba(201,169,110,0.2)] flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-accent flex items-center justify-center"
+                    style={{ color: "var(--accent-contrast)" }}>
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20 6 9 17l-5-5" />
                     </svg>
                   </div>
                 </div>
-                <span className="absolute -bottom-1 -right-1 text-xs font-medium bg-white border border-border rounded-full px-2.5 py-1 shadow-sm">
+                <span className="absolute -bottom-1 -right-2 text-xs font-medium bg-bg-elevated border border-[rgba(201,169,110,0.2)] text-accent rounded-full px-2.5 py-1 shadow-sm">
                   Completed
                 </span>
               </div>
@@ -69,12 +70,12 @@ export default function BentoSection() {
             </p>
           </Card>
 
-          {/* Consistent updates (commit feed) */}
+          {/* Consistent updates */}
           <Card delay={0.08}>
-            <div className="flex-1 rounded-xl bg-bg-secondary border border-border p-3.5">
+            <div className="flex-1 rounded-xl bg-bg-tertiary border border-[rgba(255,255,255,0.06)] p-3.5">
               <div className="flex items-center gap-2 mb-3">
-                <span className="w-2 h-2 rounded-full bg-accent" />
-                <span className="text-xs font-medium text-text-secondary">
+                <span className="w-2 h-2 rounded-full bg-accent animate-gold-pulse" />
+                <span className="text-xs font-medium text-text-secondary tracking-wider uppercase">
                   Latest updates
                 </span>
               </div>
@@ -86,9 +87,9 @@ export default function BentoSection() {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.2 + i * 0.1, duration: 0.4 }}
-                    className="flex items-center gap-2.5 bg-white border border-border rounded-lg px-3 py-2"
+                    className="flex items-center gap-2.5 bg-bg-secondary border border-[rgba(255,255,255,0.05)] rounded-lg px-3 py-2"
                   >
-                    <span className="w-5 h-5 rounded-full bg-accent/10 flex items-center justify-center text-accent shrink-0">
+                    <span className="w-5 h-5 rounded-full bg-[rgba(201,169,110,0.12)] flex items-center justify-center text-accent shrink-0">
                       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M20 6 9 17l-5-5" />
                       </svg>
@@ -111,21 +112,22 @@ export default function BentoSection() {
             </p>
           </Card>
 
-          {/* Seamless feedback (chat) */}
+          {/* Seamless feedback */}
           <Card delay={0.16}>
             <div className="flex-1 flex flex-col justify-center gap-3 py-4">
-              <div className="self-start max-w-[80%] bg-bg-secondary border border-border rounded-2xl rounded-bl-sm px-3.5 py-2.5">
+              <div className="self-start max-w-[80%] bg-bg-tertiary border border-[rgba(255,255,255,0.06)] rounded-2xl rounded-bl-sm px-3.5 py-2.5">
                 <p className="text-xs text-text-primary">
                   Can we nudge the hero up a bit?
                 </p>
               </div>
-              <div className="self-end max-w-[80%] bg-accent text-white rounded-2xl rounded-br-sm px-3.5 py-2.5">
+              <div className="self-end max-w-[80%] rounded-2xl rounded-br-sm px-3.5 py-2.5"
+                style={{ background: "var(--accent)", color: "var(--accent-contrast)" }}>
                 <p className="text-xs">On it — pushing the fix now ✦</p>
               </div>
               <div className="self-start flex items-center gap-1.5 text-text-muted px-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-text-muted/50 animate-pulse" />
-                <span className="w-1.5 h-1.5 rounded-full bg-text-muted/50 animate-pulse" style={{ animationDelay: "0.2s" }} />
-                <span className="w-1.5 h-1.5 rounded-full bg-text-muted/50 animate-pulse" style={{ animationDelay: "0.4s" }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-accent/40 animate-pulse" />
+                <span className="w-1.5 h-1.5 rounded-full bg-accent/40 animate-pulse" style={{ animationDelay: "0.2s" }} />
+                <span className="w-1.5 h-1.5 rounded-full bg-accent/40 animate-pulse" style={{ animationDelay: "0.4s" }} />
               </div>
             </div>
             <h3 className="text-base font-semibold text-text-primary mt-2">

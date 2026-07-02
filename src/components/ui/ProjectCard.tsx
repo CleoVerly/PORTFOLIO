@@ -30,27 +30,32 @@ export default function ProjectCard({ project, onVisitSite }: ProjectCardProps) 
         />
       ) : (
         <>
-          {/* placeholder image slot — swap in a screenshot later */}
-          <div className="absolute inset-0 bg-bg-secondary bg-[radial-gradient(circle_at_30%_20%,rgba(6,179,0,0.06),transparent_55%)]" />
-          <span className="absolute inset-0 flex items-center justify-center text-7xl font-semibold text-[rgba(0,0,0,0.06)] group-hover:text-[rgba(0,0,0,0.09)] transition-colors duration-500 select-none font-display">
+          {/* Dark placeholder with gold radial glow */}
+          <div className="absolute inset-0 bg-bg-tertiary"
+            style={{
+              background: "radial-gradient(circle at 30% 20%, rgba(201,169,110,0.06), transparent 60%)"
+            }}
+          />
+          <span className="absolute inset-0 flex items-center justify-center text-7xl font-light text-[rgba(201,169,110,0.08)] group-hover:text-[rgba(201,169,110,0.14)] transition-colors duration-500 select-none font-display">
             {project.title.charAt(0)}
           </span>
-          <span className="absolute bottom-3 left-3 text-[0.65rem] text-text-muted bg-white/70 backdrop-blur-sm border border-border rounded-full px-2 py-0.5">
+          <span className="absolute bottom-3 left-3 text-[0.65rem] text-text-muted bg-[rgba(0,0,0,0.5)] backdrop-blur-sm border border-[rgba(255,255,255,0.06)] rounded-full px-2 py-0.5">
             preview placeholder
           </span>
         </>
       )}
 
       {/* meta badges */}
-      <span className="absolute top-3 left-3 text-xs text-text-primary font-mono bg-white/80 backdrop-blur-sm border border-border rounded-full px-2 py-0.5">
+      <span className="absolute top-3 left-3 text-xs text-text-secondary font-mono bg-[rgba(0,0,0,0.6)] backdrop-blur-sm border border-[rgba(255,255,255,0.07)] rounded-full px-2 py-0.5">
         {project.year}
       </span>
-      <span className="absolute top-3 right-3 tech-badge bg-white/90 backdrop-blur-sm">
+      <span className="absolute top-3 right-3 tech-badge bg-[rgba(0,0,0,0.55)] backdrop-blur-sm">
         {project.category}
       </span>
 
       {/* hover arrow */}
-      <span className="absolute bottom-3 right-3 w-9 h-9 rounded-full bg-white border border-border flex items-center justify-center text-text-primary opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:border-accent transition-all duration-300 shadow-sm">
+      <span className="absolute bottom-3 right-3 w-9 h-9 rounded-full bg-[rgba(201,169,110,0.9)] border border-accent flex items-center justify-center opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-sm"
+        style={{ color: "var(--accent-contrast)" }}>
         {hasLive ? (
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M7 17L17 7M9 7h8v8" />
@@ -96,7 +101,7 @@ export default function ProjectCard({ project, onVisitSite }: ProjectCardProps) 
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-muted hover:text-text-primary transition-colors shrink-0 mt-0.5"
+              className="text-text-muted hover:text-accent transition-colors shrink-0 mt-0.5"
               aria-label="Source code"
             >
               <GithubIcon />
@@ -107,7 +112,7 @@ export default function ProjectCard({ project, onVisitSite }: ProjectCardProps) 
           {project.description}
         </p>
 
-        <div className="mt-4 pt-4 border-t border-border flex flex-wrap gap-1.5">
+        <div className="mt-4 pt-4 border-t border-[rgba(255,255,255,0.06)] flex flex-wrap gap-1.5">
           {project.techStack.slice(0, 4).map((tech) => (
             <span key={tech} className="tech-badge">
               {tech}

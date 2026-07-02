@@ -1,26 +1,16 @@
-import Navbar from "@/components/Navbar";
-import HeroSection from "@/components/HeroSection";
-import BentoSection from "@/components/BentoSection";
-import ServicesSection from "@/components/ServicesSection";
-import FeaturedProjects from "@/components/FeaturedProjects";
-import ProcessSection from "@/components/ProcessSection";
-import SkillsSection from "@/components/SkillsSection";
-import FaqSection from "@/components/FaqSection";
-import ContactSection from "@/components/ContactSection";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/layout/Navbar";
+import HeroSection from "@/components/sections/HeroSection";
+import WorkSection from "@/components/sections/WorkSection";
+import ContactSection from "@/components/sections/ContactSection";
+import Footer from "@/components/layout/Footer";
 
 export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="flex-1 relative z-10">
+      <main>
         <HeroSection />
-        <BentoSection />
-        <ServicesSection />
-        <FeaturedProjects />
-        <ProcessSection />
-        <SkillsSection />
-        <FaqSection />
+        <WorkSection />
         <ContactSection />
       </main>
       <Footer />

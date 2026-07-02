@@ -3,10 +3,10 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import ScrollReveal, { ScrollRevealItem } from "@/components/ScrollReveal";
-import ProjectCard from "@/components/ProjectCard";
-import LinkConfirmModal from "@/components/LinkConfirmModal";
-import Footer from "@/components/Footer";
+import ScrollReveal, { ScrollRevealItem } from "@/components/ui/ScrollReveal";
+import ProjectCard from "@/components/ui/ProjectCard";
+import LinkConfirmModal from "@/components/modals/LinkConfirmModal";
+import Footer from "@/components/layout/Footer";
 import { projects, categories, type Project } from "@/data/projects";
 
 export default function ProjectsPage() {
