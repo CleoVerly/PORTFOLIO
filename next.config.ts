@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "plus.unsplash.com" },
     ],
+    qualities: [25, 50, 75, 100],
     minimumCacheTTL: 60,
   },
   experimental: {

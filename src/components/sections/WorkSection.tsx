@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView, useMotionValue, useMotionTemplate, useScroll, useTransform } from "framer-motion";
-import { projects } from "@/data/projects";
+import { useRef, useState } from "react";
+import { motion, useInView, useMotionValue, useMotionTemplate } from "framer-motion";
+import { projects, Project } from "@/data/projects";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -31,12 +31,13 @@ function ProjectItem({
   project,
   index,
 }: {
-  project: (typeof projects)[0];
+  project: Project;
   index: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   
+  const [isHovered, setIsHovered] = useState(false);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -50,40 +51,89 @@ function ProjectItem({
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
-      initial={{ opacity: 0, y: 50, filter: "blur(10px)", rotateX: 0, rotateY: 0 }}
-      animate={inView ? { opacity: 1, y: 0, filter: "blur(0px)" } : {}}
-      whileHover={{ y: -4, rotateX: 1, rotateY: -1 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={() => {
+        if (window.innerWidth < 1024) setIsHovered(!isHovered);
+      }}
+      initial={{ opacity: 0, y: 50 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      whileHover={{ y: -4, transition: { duration: 0.4, ease } }}
       transition={{ duration: 1, delay: index * 0.15, ease }}
-      className="card-dark group relative overflow-hidden flex flex-col h-full"
-      style={{ transformStyle: "preserve-3d" } as any}
+      className="group relative flex flex-col h-full cursor-pointer w-full"
+      style={{ transformStyle: "preserve-3d", WebkitTapHighlightColor: "transparent" } as any}
     >
-      {/* 4% Spotlight following cursor */}
-      <motion.div 
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
-        style={{
-          background: useMotionTemplate`radial-gradient(circle 350px at ${mouseX}px ${mouseY}px, rgba(230,192,141,0.04), transparent 80%)`,
-          zIndex: 1
-        } as any}
-      />
-
-      {/* Top meta row */}
-      <div
-        className="flex items-center justify-between px-8 pt-8 pb-6 relative z-10"
-        style={{ borderBottom: "1px solid var(--border)" }}
+      {/* 
+        1. THE VISUAL CARD BACKGROUND 
+        Anchored to the bottom. As height expands, it visually grows upwards.
+      */}
+      <motion.div
+        className="card-dark absolute bottom-0 left-0 w-full overflow-hidden z-0 rounded-[inherit]"
+        initial={false}
+        animate={{ height: isHovered ? "calc(100% + 240px)" : "100%" }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        <span className="label text-gold" style={{ color: "var(--gold)" }}>
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        <span
-          className="text-xs font-light tracking-widest uppercase"
-          style={{ color: "var(--text-3)", letterSpacing: "0.12em" }}
-        >
-          {project.category}
-        </span>
-      </div>
+        {/* Spotlight/Glass Effect */}
+        <motion.div 
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
+          style={{
+            background: useMotionTemplate`radial-gradient(circle 350px at ${mouseX}px ${mouseY}px, rgba(230,192,141,0.03), transparent 80%)`,
+            zIndex: 1
+          } as any}
+        />
+      </motion.div>
 
-      {/* Main content */}
-      <div className="px-8 py-8 flex flex-col flex-grow relative z-10">
+      {/* 2. THE LID (Top Meta) & IMAGE GAP */}
+      <motion.div
+        className="relative z-20 shrink-0"
+        initial={false}
+        animate={{ y: isHovered ? -240 : 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {/* Top meta row */}
+        <div
+          className="flex items-center justify-between px-5 sm:px-8 pt-8 pb-6 relative z-10"
+          style={{ borderBottom: "1px solid var(--border)" }}
+        >
+          <span className="label text-gold" style={{ color: "var(--gold)" }}>
+            {String(index + 1).padStart(2, "0")}
+          </span>
+          <span
+            className="text-xs font-light tracking-widest uppercase"
+            style={{ color: "var(--text-3)", letterSpacing: "0.12em" }}
+          >
+            {project.category}
+          </span>
+        </div>
+
+        {/* The Image (Expands perfectly into the newly created gap) */}
+        <motion.div
+          className="absolute top-full left-0 w-full overflow-hidden pointer-events-none bg-[var(--bg-card)]"
+          initial={false}
+          animate={{ height: isHovered ? 240 : 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <motion.div
+            className="absolute bottom-0 left-0 w-full h-[240px] overflow-hidden"
+            initial={false}
+            animate={{ opacity: isHovered ? 1 : 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {project.image && (
+              <img 
+                src={project.image} 
+                alt={project.title} 
+                className="w-full h-full object-cover opacity-90" 
+              />
+            )}
+            <div className="absolute inset-0 bg-black/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] via-transparent to-black/40" />
+          </motion.div>
+        </motion.div>
+      </motion.div>
+
+      {/* 3. MAIN CONTENT (Stationary in document flow) */}
+      <div className="px-5 sm:px-8 py-8 flex flex-col flex-grow relative z-10">
         <h3
           className="display-section text-3xl sm:text-4xl mb-4 group-hover:text-gold group-hover:-translate-y-[2px] transition-all duration-500"
           style={{ fontWeight: 300 }}
@@ -137,9 +187,9 @@ function ProjectItem({
         </div>
       </div>
 
-      {/* Bottom action row */}
+      {/* 4. BOTTOM ACTION ROW (Stationary in document flow) */}
       <div
-        className="flex items-center justify-between px-8 py-5 relative z-10"
+        className="flex items-center justify-between px-5 sm:px-8 py-5 relative z-10"
         style={{ borderTop: "1px solid var(--border)" }}
       >
         <div className="flex gap-4">
@@ -178,12 +228,11 @@ function ProjectItem({
 export default function WorkSection() {
   const featuredProjects = projects.filter((p) => p.featured);
   
-  // VisionOS style typography blur/translateY on scroll out
   const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start start"] });
   
   return (
     <section ref={ref} id="work" className="relative py-40 px-6 sm:px-10 z-20 transition-colors duration-1000" style={{ background: "var(--bg)" }}>
+      
       {/* Section header */}
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-12 mb-24">
@@ -227,9 +276,13 @@ export default function WorkSection() {
         </div>
 
         {/* Project list */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 relative z-10">
           {featuredProjects.map((p, i) => (
-            <ProjectItem key={p.id} project={p} index={i} />
+            <ProjectItem 
+              key={p.id} 
+              project={p} 
+              index={i} 
+            />
           ))}
         </div>
       </div>

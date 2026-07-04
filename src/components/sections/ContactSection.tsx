@@ -100,7 +100,7 @@ export default function ContactSection() {
         setStatus("error");
         setResultMsg(data.message || "Something went wrong. Please try again.");
       }
-    } catch (err) {
+    } catch {
       setStatus("error");
       setResultMsg("Failed to send message. Please try again.");
     }
@@ -132,18 +132,55 @@ export default function ContactSection() {
           Get in touch
         </motion.span>
 
-        {/* Giant editorial headline */}
+        {/* Giant editorial headline (Word-by-word reveal) */}
         <motion.h2
-          initial={{ opacity: 0, y: 40 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.1, duration: 1, ease }}
           className="display-section"
-          style={{ fontSize: "clamp(2.8rem, 7vw, 8rem)", marginBottom: "2rem" } as React.CSSProperties}
+          style={{ fontSize: "clamp(2.2rem, 8vw, 8rem)", marginBottom: "2rem", lineHeight: 1.1 } as React.CSSProperties}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.25, delayChildren: 0.15 } }
+          }}
         >
-          Good products start
+          <span className="inline-block whitespace-nowrap">
+            {["Good", "products", "start"].map((word, i) => (
+              <motion.span
+                key={i}
+                className="inline-block mr-[0.25em] last:mr-0"
+                variants={{
+                  hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0, 
+                    filter: "blur(0px)",
+                    transition: { duration: 1.8, ease: [0.16, 1, 0.3, 1] }
+                  }
+                }}
+              >
+                {word}
+              </motion.span>
+            ))}
+          </span>
           <br />
-          <em style={{ color: "var(--text-3)", fontStyle: "normal" }}>
-            with good conversations.
+          <em style={{ color: "var(--text-3)", fontStyle: "normal" }} className="inline-block whitespace-nowrap">
+            {["with", "good", "conversations."].map((word, i) => (
+              <motion.span
+                key={i}
+                className="inline-block mr-[0.25em] last:mr-0"
+                variants={{
+                  hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0, 
+                    filter: "blur(0px)",
+                    transition: { duration: 1.8, ease: [0.16, 1, 0.3, 1] }
+                  }
+                }}
+              >
+                {word}
+              </motion.span>
+            ))}
           </em>
         </motion.h2>
 

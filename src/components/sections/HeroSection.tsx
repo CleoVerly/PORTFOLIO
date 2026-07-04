@@ -135,12 +135,8 @@ export default function HeroSection() {
             initial={{ opacity: 0, filter: "blur(16px)", scale: 0.95 }}
             animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
             transition={{ delay: 0.4, duration: 1, ease }}
-            className="display-hero w-full text-center"
-            style={{
-              fontSize: "clamp(8rem, 22vw, 280px)",
-              marginRight: "15%", // Offset left
-              marginTop: "-10vh",
-            } as any}
+            className="display-hero w-full text-center md:-mt-[10vh] md:pr-[15%] max-md:mb-2"
+            style={{ fontSize: "clamp(7rem, 25vw, 280px)" }}
           >
             Cleo
           </motion.h1>
@@ -149,13 +145,9 @@ export default function HeroSection() {
           <motion.h1
             initial={{ opacity: 0, filter: "blur(16px)", scale: 0.95 }}
             animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
-            transition={{ delay: 0.5, duration: 1, ease }}
-            className="display-hero w-full text-center hidden sm:block"
-            style={{
-              fontSize: "clamp(8rem, 22vw, 280px)",
-              marginLeft: "15%", // Offset right
-              marginTop: "-8vh",
-            } as any}
+            transition={{ delay: 0.6, duration: 1, ease }}
+            className="display-hero w-full text-center md:-mt-[5vh] md:pl-[15%]"
+            style={{ fontSize: "clamp(7rem, 25vw, 280px)" }}
           >
             Verly
           </motion.h1>
@@ -163,7 +155,7 @@ export default function HeroSection() {
 
         {/* ── CENTRAL LANTERN IMAGE with Parallax & Hover Animation ── */}
         <motion.div
-          className="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-10"
+          className="absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none z-10 mt-[5vh]"
           style={{ x: parallaxX, y: parallaxY }}
         >
           <motion.div
@@ -177,14 +169,15 @@ export default function HeroSection() {
               <div
                 className="relative pointer-events-none select-none"
                 style={{
-                  width: "clamp(300px, 45vw, 650px)",
-                  height: "clamp(400px, 60vw, 850px)",
+                  width: "clamp(220px, 45vw, 650px)",
+                  height: "clamp(300px, 60vw, 850px)",
                 }}
               >
                 <Image
                   src="/lantern.png"
                   alt=""
                   fill
+                  sizes="(max-width: 768px) 45vw, 650px"
                   draggable={false}
                   className="object-contain drop-shadow-2xl pointer-events-none select-none"
                   style={{ mixBlendMode: "lighten" }}
@@ -210,41 +203,30 @@ export default function HeroSection() {
           </motion.div>
         </motion.div>
 
-        {/* ── FLOATING ANNOTATION LABELS ── */}
-        {/* Top right: tech */}
-        <Annotation
-          delay={0.6}
-          className="hidden lg:flex"
-          style={{ top: "22%", left: "68%", zIndex: 20 }}
-        >
-          Built with Next.js
-        </Annotation>
+        {/* ── DESKTOP ONLY ELEMENTS (Annotations & Stats) ── */}
+        <div className="hidden lg:block">
+          {/* ── FLOATING ANNOTATION LABELS ── */}
+          {/* Top right: tech */}
+          <Annotation delay={0.6} style={{ top: "22%", left: "68%", zIndex: 20 }}>
+            Built with Next.js
+          </Annotation>
 
-        {/* Left center: location */}
-        <Annotation
-          delay={0.65}
-          className="hidden lg:flex"
-          style={{ top: "48%", left: "15%", zIndex: 20 }}
-        >
-          Based in Indonesia
-        </Annotation>
+          {/* Left center: location */}
+          <Annotation delay={0.65} style={{ top: "48%", left: "15%", zIndex: 20 }}>
+            Based in Indonesia
+          </Annotation>
 
-        {/* Bottom left: status */}
-        <Annotation
-          delay={0.7}
-          className="hidden lg:flex"
-          style={{ top: "72%", left: "20%", zIndex: 20 }}
-        >
-          Open for Freelance
-        </Annotation>
+          {/* Bottom left: status */}
+          <Annotation delay={0.7} style={{ top: "72%", left: "20%", zIndex: 20 }}>
+            Open for Freelance
+          </Annotation>
 
-        {/* ── LEFT SIDE STATS (Minimal) ── */}
-        <motion.div
-          className="absolute bottom-16 left-16 flex flex-col gap-12 z-20 hidden lg:flex"
-        >
-          <Stat number="04" text="Years Experience" delay={0.7} />
-          <Stat number="20+" text="Projects Delivered" delay={0.75} />
-        </motion.div>
+          {/* ── LEFT SIDE STATS (Minimal) ── */}
+          <motion.div className="absolute bottom-16 left-16 flex flex-col gap-12 z-20">
+            <Stat number="04" text="Years Experience" delay={0.7} />
+            <Stat number="20+" text="Projects Delivered" delay={0.75} />
+          </motion.div>
+        </div>
 
         {/* ── RIGHT SIDE CTA (Floating near lantern) ── */}
         <motion.div

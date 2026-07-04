@@ -20,39 +20,40 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: "olimversal-academy",
-    title: "Olimversal Academy",
+    id: "bumdes-sirah-dayeuh",
+    title: "BUMDES Sirah Dayeuh",
     description:
-      "Interactive learning platform built for science olympiad training with cinematic UI and smooth animations.",
+      "A modern profile website for a village enterprise, driving local economic growth with a clean and responsive interface.",
     longDescription:
-      "Landing page for Olimversal Academy — a science olympiad training platform. Built with Next.js 15 (App Router), React 19, and Tailwind CSS v4. Relies on Framer Motion for mask reveals, coverflow carousels, scroll progress, and animated counters, with Playfair Display + Plus Jakarta Sans typography.",
-    techStack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion"],
-    githubUrl: "https://github.com/CleoVerly/Olimversal-Academy",
+      "The official profile platform for BUMDES Sirah Dayeuh, designed to promote the village's potential and business units. Built with Next.js and Tailwind CSS, delivering a fast, responsive, and highly accessible user experience for the local community.",
+    techStack: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+    liveUrl: "https://bumdes-sirah-deyueh.vercel.app",
     category: "Web App",
     featured: true,
-    year: 2026,
+    year: 2024,
     role: "Front-End Engineer",
-    client: "Olimversal",
-    status: "Live",
-    duration: "2 Months",
-  },
-  {
-    id: "cat-meong-app",
-    title: "Cat Meong — AI Translator",
-    description:
-      "Intelligent PWA that analyzes cat vocalizations and predicts emotions using an AI model.",
-    longDescription:
-      "Smart web application to translate cat vocalizations into emotional context (Comfortable, Anxious, Hungry) using an AI model. Supports live mic recording, audio upload, emotion prediction, and analysis history. Built as a PWA with React, TypeScript, and Vite.",
-    techStack: ["React", "TypeScript", "Vite", "PWA"],
-    liveUrl: "https://cat-meong-app.vercel.app",
-    githubUrl: "https://github.com/CleoVerly/cat-meong-app",
-    category: "AI App",
-    featured: true,
-    year: 2026,
-    role: "Full Stack Engineer",
-    client: "Personal Project",
+    client: "BUMDES Sirah Dayeuh",
     status: "Live",
     duration: "1 Month",
+    image: "/projects/bumdes.webp",
+  },
+  {
+    id: "kembang-sereh",
+    title: "Kembang Sereh",
+    description:
+      "A refreshing digital storefront for a natural herbal drink brand, featuring a vibrant and modern visual design.",
+    longDescription:
+      "A digital marketing platform for Kembang Sereh, an all-natural herbal beverage. Showcases product catalogs, health benefits, and a seamless ordering interface. Built with modern web technologies focusing heavily on performance and SEO.",
+    techStack: ["React", "TypeScript", "Tailwind CSS"],
+    liveUrl: "https://kembang-sereh.vercel.app",
+    category: "Landing Page",
+    featured: true,
+    year: 2024,
+    role: "Full Stack Engineer",
+    client: "Kembang Sereh",
+    status: "Live",
+    duration: "3 Weeks",
+    image: "/projects/kembangsereh.webp",
   },
   {
     id: "craftmit",
@@ -62,7 +63,7 @@ export const projects: Project[] = [
     longDescription:
       "Web-based tool leveraging OpenRouter AI to craft clean, Conventional Commits-compliant messages directly from git diff outputs. Features a bold neubrutalism interface with smart-swap UI to toggle between diff input and results. Built with React + Vite.",
     techStack: ["React", "Vite", "OpenRouter AI", "Tailwind CSS"],
-    liveUrl: "https://craftmit-cv-team.vercel.app",
+    liveUrl: "https://craftmit.cleoverly.online",
     githubUrl: "https://github.com/CleoVerly/Craftmit-CVTeam",
     category: "AI Tool",
     featured: true,
@@ -71,6 +72,7 @@ export const projects: Project[] = [
     client: "CV Team",
     status: "Live",
     duration: "3 Weeks",
+    image: "/projects/craftmit.webp",
   },
   {
     id: "gamerecs",

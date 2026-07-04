@@ -54,6 +54,7 @@ export const metadata: Metadata = {
 };
 
 import GlobalEffects from "@/components/layout/GlobalEffects";
+import SmoothScroll from "@/components/layout/SmoothScroll";
 
 export default function RootLayout({
   children,
@@ -85,7 +86,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <GlobalEffects />
-        {children}
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );
