@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useInView, useMotionValue, useMotionTemplate } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform, MotionValue, AnimatePresence } from "framer-motion";
 import { projects, Project } from "@/data/projects";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -27,199 +27,58 @@ function WordReveal({ text, delay = 0 }: { text: string; delay?: number }) {
   );
 }
 
-function ProjectItem({
-  project,
-  index,
-}: {
-  project: Project;
-  index: number;
+function ProjectCard3D({ 
+  project, 
+  index, 
+  scrollX,
+  cardWidth,
+}: { 
+  project: Project; 
+  index: number; 
+  scrollX: MotionValue<number>;
+  cardWidth: number;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  
-  const [isHovered, setIsHovered] = useState(false);
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const centerPos = index * cardWidth;
 
-  function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
-    const { left, top } = currentTarget.getBoundingClientRect();
-    mouseX.set(clientX - left);
-    mouseY.set(clientY - top);
-  }
+  // Coverflow Math (Convex)
+  const distanceRange = [
+    centerPos - cardWidth * 2,
+    centerPos - cardWidth,
+    centerPos,
+    centerPos + cardWidth,
+    centerPos + cardWidth * 2
+  ];
+
+  // Left cards face right (+rotateY), Right cards face left (-rotateY)
+  const yRotation = useTransform(scrollX, distanceRange, [50, 35, 0, -35, -50]);
+  const scale3D = useTransform(scrollX, distanceRange, [0.6, 0.8, 1, 0.8, 0.6]);
+  const zTranslation = useTransform(scrollX, distanceRange, [-400, -200, 0, -200, -400]);
+  const op = useTransform(scrollX, distanceRange, [0, 0.5, 1, 0.5, 0]);
 
   return (
     <motion.div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={() => {
-        if (window.innerWidth < 1024) setIsHovered(!isHovered);
+      style={{ 
+        scale: scale3D,
+        rotateY: yRotation,
+        z: zTranslation,
+        opacity: op,
+        transformStyle: "preserve-3d",
+        width: cardWidth - 32, // Set width dynamically based on cardWidth minus margins
       }}
-      initial={{ opacity: 0, y: 50 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      whileHover={{ y: -4, transition: { duration: 0.4, ease } }}
-      transition={{ duration: 1, delay: index * 0.15, ease }}
-      className="group relative flex flex-col h-full cursor-pointer w-full"
-      style={{ transformStyle: "preserve-3d", WebkitTapHighlightColor: "transparent" } as any}
+      className="flex flex-col items-center shrink-0 mx-4 snap-center cursor-pointer"
     >
-      {/* 
-        1. THE VISUAL CARD BACKGROUND 
-        Anchored to the bottom. As height expands, it visually grows upwards.
-      */}
-      <motion.div
-        className="card-dark absolute bottom-0 left-0 w-full overflow-hidden z-0 rounded-[inherit]"
-        initial={false}
-        animate={{ height: isHovered ? "calc(100% + 240px)" : "100%" }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      >
-        {/* Spotlight/Glass Effect */}
-        <motion.div 
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-500"
-          style={{
-            background: useMotionTemplate`radial-gradient(circle 350px at ${mouseX}px ${mouseY}px, rgba(230,192,141,0.03), transparent 80%)`,
-            zIndex: 1
-          } as any}
-        />
-      </motion.div>
-
-      {/* 2. THE LID (Top Meta) & IMAGE GAP */}
-      <motion.div
-        className="relative z-20 shrink-0"
-        initial={false}
-        animate={{ y: isHovered ? -240 : 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      >
-        {/* Top meta row */}
-        <div
-          className="flex items-center justify-between px-5 sm:px-8 pt-8 pb-6 relative z-10"
-          style={{ borderBottom: "1px solid var(--border)" }}
-        >
-          <span className="label text-gold" style={{ color: "var(--gold)" }}>
-            {String(index + 1).padStart(2, "0")}
-          </span>
-          <span
-            className="text-xs font-light tracking-widest uppercase"
-            style={{ color: "var(--text-3)", letterSpacing: "0.12em" }}
-          >
-            {project.category}
-          </span>
-        </div>
-
-        {/* The Image (Expands perfectly into the newly created gap) */}
-        <motion.div
-          className="absolute top-full left-0 w-full overflow-hidden pointer-events-none bg-[var(--bg-card)]"
-          initial={false}
-          animate={{ height: isHovered ? 240 : 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <motion.div
-            className="absolute bottom-0 left-0 w-full h-[240px] overflow-hidden"
-            initial={false}
-            animate={{ opacity: isHovered ? 1 : 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {project.image && (
-              <img 
-                src={project.image} 
-                alt={project.title} 
-                className="w-full h-full object-cover opacity-90" 
-              />
-            )}
-            <div className="absolute inset-0 bg-black/20" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] via-transparent to-black/40" />
-          </motion.div>
-        </motion.div>
-      </motion.div>
-
-      {/* 3. MAIN CONTENT (Stationary in document flow) */}
-      <div className="px-5 sm:px-8 py-8 flex flex-col flex-grow relative z-10">
-        <h3
-          className="display-section text-3xl sm:text-4xl mb-4 group-hover:text-gold group-hover:-translate-y-[2px] transition-all duration-500"
-          style={{ fontWeight: 300 }}
-        >
-          {project.title}
-        </h3>
-        <p
-          className="text-sm leading-relaxed mb-8"
-          style={{ color: "var(--text-2)" }}
-        >
-          {project.description}
-        </p>
-
-        {/* Metadata Grid (Role, Year, Client, Status) */}
-        <div className="grid grid-cols-2 gap-y-6 gap-x-4 mb-8">
-          {[
-            { label: "Role", value: project.role || "Developer" },
-            { label: "Year", value: project.year },
-            { label: "Client", value: project.client || "Independent" },
-            { label: "Status", value: project.status || "Completed" },
-          ].map((meta, i) => (
-            <div key={i} className="flex flex-col gap-1">
-              <span className="text-[10px] uppercase tracking-widest" style={{ color: "var(--text-3)" }}>
-                {meta.label}
-              </span>
-              <span className="text-xs font-light" style={{ color: "var(--text-1)" }}>
-                {meta.value}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-auto" />
-
-        {/* Tech stack */}
-        <div className="flex flex-wrap gap-2 mt-6">
-          {project.techStack.slice(0, 4).map((tech) => (
-            <span
-              key={tech}
-              className="text-xs px-3 py-1 rounded-full group-hover:-translate-y-1 transition-transform duration-500"
-              style={{
-                background: "rgba(255,255,255,0.02)",
-                border: "1px solid var(--border)",
-                color: "var(--text-2)",
-                letterSpacing: "0.05em",
-              }}
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* 4. BOTTOM ACTION ROW (Stationary in document flow) */}
-      <div
-        className="flex items-center justify-between px-5 sm:px-8 py-5 relative z-10"
-        style={{ borderTop: "1px solid var(--border)" }}
-      >
-        <div className="flex gap-4">
-          {project.liveUrl && (
-            <a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="annotation text-xs group/btn hover:text-[var(--gold)] transition-colors overflow-hidden"
-              style={{ padding: "7px 14px" }}
-            >
-              <span className="flex items-center gap-1 group-hover/btn:-translate-x-1 transition-transform duration-250">
-                Live Site <span className="opacity-0 -ml-2 group-hover/btn:opacity-100 group-hover/btn:ml-0 transition-all duration-250">→</span>
-              </span>
-            </a>
-          )}
-          {project.githubUrl && (
-            <a
-              href={project.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="annotation text-xs group/btn hover:text-[var(--gold)] transition-colors overflow-hidden"
-              style={{ padding: "7px 14px" }}
-            >
-              <span className="flex items-center gap-1 group-hover/btn:-translate-x-1 transition-transform duration-250">
-                GitHub <span className="opacity-0 -ml-2 group-hover/btn:opacity-100 group-hover/btn:ml-0 transition-all duration-250">→</span>
-              </span>
-            </a>
-          )}
-        </div>
+      <div className="w-full aspect-video sm:h-[320px] rounded-3xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative">
+        {project.image ? (
+          <img
+            src={project.image}
+            alt={project.title}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 w-full h-full bg-[var(--bg-card)]" />
+        )}
+        {/* Subtle inner shadow/border */}
+        <div className="absolute inset-0 border border-white/10 rounded-3xl pointer-events-none" />
       </div>
     </motion.div>
   );
@@ -228,64 +87,163 @@ function ProjectItem({
 export default function WorkSection() {
   const featuredProjects = projects.filter((p) => p.featured);
   
-  const ref = useRef<HTMLElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const { scrollX } = useScroll({ container: scrollRef });
+
+  // Hydration & Responsive setup
+  const [isMounted, setIsMounted] = useState(false);
+  const [cardWidth, setCardWidth] = useState(560); // Default to desktop 560px
   
+  useEffect(() => {
+    setIsMounted(true);
+    const updateWidth = () => {
+      // Mobile: 320px width + 32px gap = 352
+      // Desktop: 560px width + 32px gap = 592
+      setCardWidth(window.innerWidth < 640 ? 352 : 592); 
+    };
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
+  // Convert vertical mouse wheel to horizontal scroll
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      // If the user scrolls vertically, map it to horizontal scroll
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        el.scrollLeft += e.deltaY;
+      }
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
+
+  const allProjects = [...featuredProjects, ...featuredProjects, ...featuredProjects];
+
+  // Active Project State
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const currentScroll = scrollRef.current.scrollLeft;
+    // Calculate which card is closest to the center
+    const newIndex = Math.round(currentScroll / cardWidth);
+    if (newIndex >= 0 && newIndex < allProjects.length && newIndex !== activeIndex) {
+      setActiveIndex(newIndex);
+    }
+  };
+
+  const activeProject = allProjects[activeIndex];
+
   return (
-    <section ref={ref} id="work" className="relative py-40 px-6 sm:px-10 z-20 transition-colors duration-1000" style={{ background: "var(--bg)" }}>
-      
+    <section id="work" className="relative z-20 py-24 sm:py-32 overflow-hidden" style={{ background: "var(--bg)" }}>
       {/* Section header */}
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-12 mb-24">
-          <div>
-            <motion.span
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="label block mb-6"
-            >
-              Selected Work
-            </motion.span>
-            <h2
-              className="display-section"
-              style={{ fontSize: "clamp(2.5rem, 5vw, 5rem)" }}
-            >
-              <WordReveal text="Products built" delay={0.1} />
-              <br />
-              <WordReveal text="to solve" delay={0.3} />
-              <br />
-              <span style={{ color: "var(--text-2)" }}>
-                <WordReveal text="real-world problems." delay={0.5} />
-              </span>
-            </h2>
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 mb-8 sm:mb-12 flex flex-col items-center text-center">
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-xs uppercase tracking-widest mb-4"
+          style={{ color: "var(--text-3)" }}
+        >
+          Explore more brand identities
+        </motion.p>
+        <motion.button
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
+          className="flex items-center gap-3 text-sm font-bold uppercase tracking-wider"
+          style={{ color: "var(--text-1)" }}
+        >
+          See more Projects
+          <span className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "var(--gold)", color: "var(--bg)" }}>
+            ↗
+          </span>
+        </motion.button>
+      </div>
+
+      {/* Coverflow Carousel */}
+      <div className="w-full relative overflow-hidden perspective-[1200px] mt-10">
+        <div 
+          ref={scrollRef}
+          onScroll={handleScroll}
+          className="w-full overflow-x-auto overflow-y-hidden pb-8 pt-8 cursor-grab active:cursor-grabbing snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+        >
+          <div key={cardWidth} className="flex flex-row items-center w-max h-[400px]" style={{ transformStyle: "preserve-3d" }}>
+            {/* Spacer to center the first card */}
+            <div className="shrink-0" style={{ width: `calc(50vw - ${cardWidth / 2}px)` }} />
+            
+            {isMounted && allProjects.map((p, i) => (
+              <ProjectCard3D 
+                key={`${p.id}-${i}`} 
+                project={p} 
+                index={i}
+                scrollX={scrollX}
+                cardWidth={cardWidth}
+              />
+            ))}
+            
+            {/* Spacer to center the last card */}
+            <div className="shrink-0" style={{ width: `calc(50vw - ${cardWidth / 2}px)` }} />
           </div>
-
-          <motion.a
-            initial={{ opacity: 0, filter: "blur(10px)" }}
-            whileInView={{ opacity: 1, filter: "blur(0px)" }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            href="https://github.com/cleoverly"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="annotation self-start sm:self-end"
-          >
-            All on GitHub
-            <span className="annotation-arrow">↗</span>
-          </motion.a>
-        </div>
-
-        {/* Project list */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 relative z-10">
-          {featuredProjects.map((p, i) => (
-            <ProjectItem 
-              key={p.id} 
-              project={p} 
-              index={i} 
-            />
-          ))}
         </div>
       </div>
+
+      {/* Synchronized Details Panel */}
+      <div className="max-w-2xl mx-auto px-6 mt-8">
+        <AnimatePresence mode="wait">
+          {activeProject && (
+            <motion.div
+              key={activeIndex}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3, ease }}
+              className="flex flex-col items-center text-center"
+            >
+              <h3 className="text-2xl sm:text-3xl font-bold mb-2" style={{ color: "var(--text-1)" }}>
+                {activeProject.title}
+              </h3>
+              <p className="text-sm sm:text-base max-w-lg mb-6 leading-relaxed" style={{ color: "var(--text-2)" }}>
+                {activeProject.description}
+              </p>
+              
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
+                {activeProject.techStack.slice(0, 4).map((tech, i) => (
+                  <span 
+                    key={i} 
+                    className="text-xs font-medium px-3 py-1.5 rounded-full border"
+                    style={{ borderColor: "var(--border)", color: "var(--text-2)" }}
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              {(activeProject.liveUrl || activeProject.githubUrl) && (
+                <a 
+                  href={activeProject.liveUrl || activeProject.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs uppercase tracking-widest font-bold flex items-center gap-2 px-6 py-3 rounded-full hover:scale-105 transition-transform"
+                  style={{ background: "var(--text-1)", color: "var(--bg)" }}
+                >
+                  View Project
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M7 17l9.2-9.2M17 17V7.8H7.8" />
+                  </svg>
+                </a>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+
 
       {/* Design Philosophy Section (Cool Ambient Space) */}
       <div id="about" className="max-w-7xl mx-auto py-40 border-t mt-40" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
