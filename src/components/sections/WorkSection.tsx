@@ -151,7 +151,10 @@ export default function WorkSection() {
         >
           Explore more brand identities
         </motion.p>
-        <motion.button
+        <motion.a
+          href="https://github.com/CleoVerly"
+          target="_blank"
+          rel="noopener noreferrer"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -163,7 +166,7 @@ export default function WorkSection() {
           <span className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "var(--gold)", color: "var(--bg)" }}>
             ↗
           </span>
-        </motion.button>
+        </motion.a>
       </div>
 
       {/* Coverflow Carousel */}
