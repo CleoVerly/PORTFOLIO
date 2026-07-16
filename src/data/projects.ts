@@ -74,57 +74,6 @@ export const projects: Project[] = [
     duration: "3 Weeks",
     image: "/projects/craftmit.webp",
   },
-  {
-    id: "gamerecs",
-    title: "GameRecs",
-    description:
-      "Steam game recommendation system based on content-based filtering (TF-IDF & cosine similarity).",
-    longDescription:
-      "Web application recommending Steam games using content-based filtering. Finds similarities based on genre, tags, and categories with TF-IDF and cosine similarity. Supports flexible search, genre filtering, pagination, and random recommendations. Flask backend with Tailwind CSS + DaisyUI.",
-    techStack: ["Python", "Flask", "scikit-learn", "Tailwind CSS"],
-    githubUrl: "https://github.com/CleoVerly/Web-Recomendation-Games",
-    category: "Machine Learning",
-    featured: false,
-    year: 2025,
-    role: "Full Stack Engineer",
-    client: "Academic Project",
-    status: "Completed",
-    duration: "1 Month",
-  },
-  {
-    id: "crysense",
-    title: "CrySense",
-    description:
-      "Infant cry classification (hungry, pain, uncomfortable) utilizing Machine Learning & Deep Learning.",
-    longDescription:
-      "Baby cry classification system to detect infant needs. Performs audio preprocessing, feature extraction (MFCC, Chroma, Spectral Contrast), data augmentation, then trains and evaluates sound classification models based on ML and Deep Learning.",
-    techStack: ["Python", "TensorFlow", "Librosa", "scikit-learn"],
-    githubUrl: "https://github.com/CleoVerly/CrySense",
-    category: "Machine Learning",
-    featured: false,
-    year: 2026,
-    role: "ML Engineer",
-    client: "Academic Project",
-    status: "Completed",
-    duration: "2 Months",
-  },
-  {
-    id: "bike-sharing-dashboard",
-    title: "Bike Sharing Dashboard",
-    description:
-      "Data analysis dashboard for bike sharing rentals based on seasons, time, and trends.",
-    longDescription:
-      "Interactive dashboard built with Streamlit to analyze bike sharing rental data. Presents trends based on seasons, time, and total rentals through clear data visualizations.",
-    techStack: ["Python", "Streamlit", "Pandas", "Matplotlib"],
-    githubUrl: "https://github.com/CleoVerly/Data-Analysis-Bike-Sharing",
-    category: "Data",
-    featured: false,
-    year: 2025,
-    role: "Data Analyst",
-    client: "Personal Project",
-    status: "Completed",
-    duration: "2 Weeks",
-  },
 ];
 
 export const categories = ["All", ...Array.from(new Set(projects.map((p) => p.category)))];
